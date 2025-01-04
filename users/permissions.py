@@ -1,4 +1,4 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, OR
 
 
 class IsAdmin(BasePermission):
@@ -9,6 +9,9 @@ class IsStaff(BasePermission):
     def has_permission(self, request, view):
         return request.user.is_staff
 
-class IsAdminOrStaff(BasePermission):
+class IsAdminOrOwner(BasePermission):
     def has_permission(self, request, view):
-        return request.user.is_staff or request.user.is_superuser
+        return request.user.is_superuser
+
+    def has_object_permission(self, request, view, obj):
+        return request.user.is_superuser or obj == request.user

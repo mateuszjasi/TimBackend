@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from .serializers import UserSerializer
-from users.permissions import IsAdmin
+from users.permissions import IsAdmin, IsAdminOrOwner
 
 User = get_user_model()
 
@@ -26,6 +26,8 @@ class UserDetail(APIView):
     def get_permissions(self):
         if self.request.method in ['PUT', 'PATCH', 'DELETE']:
             return [IsAdmin()]
+        elif self.request.method == 'GET':
+            return [IsAdminOrOwner()]
         return []
 
     def get(self, request, pk):
