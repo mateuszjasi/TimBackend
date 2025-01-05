@@ -1,4 +1,5 @@
 import os
+import uuid
 from django.db import models
 from django.core.exceptions import ValidationError
 
@@ -11,7 +12,7 @@ def validate_image(file):
 
 def product_image_path(instance, filename):
     ext = os.path.splitext(filename)[1].lower()
-    return f'product_images/{instance.pk}_1{ext}'
+    return f'product_images/{uuid.uuid4()}{ext}'
 
 
 class Product(models.Model):
