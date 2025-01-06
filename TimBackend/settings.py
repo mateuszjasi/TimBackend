@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'paypal',
     'users',
     'products',
     'history',
@@ -81,6 +82,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'TimBackend.wsgi.application'
 
+PAYPAL_CLIENT_ID = 'AZHu2_qkeMnl8_HSdaF_Goc_4dVxcKjRjrytkgRxLo3VMvB877hCVMZHLX8MAVPPkBYq4QdaqrdjHeq6'
+PAYPAL_CLIENT_SECRET = 'ENqS-g51kg8n2PLZJ868_w0V9eADMHd_qDoUOXs_wkqRjhLO6Ta3KFoQUQPqk_LqzjK4Umf6VpmPAF4f'
+PAYPAL_MODE = 'sandbox'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

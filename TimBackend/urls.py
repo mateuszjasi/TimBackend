@@ -11,6 +11,7 @@ urlpatterns = [
     path('api/', include('products.urls')),
     path('api/', include('users.urls')),
     path('api/', include('history.urls')),
+    path('paypal/', include('paypal.urls')),
 ]
 
 if settings.DEBUG:

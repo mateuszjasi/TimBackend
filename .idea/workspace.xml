@@ -4,10 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5d0fa7a-97c2-4f12-9b46-2195331f0215" name="Changes" comment="Product images tweaks">
+    <list default="true" id="c5d0fa7a-97c2-4f12-9b46-2195331f0215" name="Changes" comment="Product images tweaks again">
+      <change afterPath="$PROJECT_DIR$/paypal/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/paypal/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/f073590f-a515-4569-a79c-f005616be463.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/f073590f-a515-4569-a79c-f005616be463.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TimBackend/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/TimBackend/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/products/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/products/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TimBackend/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/TimBackend/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/history/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/history/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/history/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/history/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/permissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/permissions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +118,10 @@
       <workItem from="1736005197189" duration="7594000" />
       <workItem from="1736026160607" duration="282000" />
       <workItem from="1736029779212" duration="1026000" />
-      <workItem from="1736095418154" duration="9974000" />
+      <workItem from="1736095418154" duration="14306000" />
+      <workItem from="1736167709265" duration="158000" />
+      <workItem from="1736167879709" duration="393000" />
+      <workItem from="1736171844417" duration="5160000" />
     </task>
     <task id="LOCAL-00001" summary="Fist commit">
       <option name="closed" value="true" />
@@ -145,7 +155,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736102358910</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Product images tweaks again">
+      <option name="closed" value="true" />
+      <created>1736105862707</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1736105862707</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -156,6 +174,7 @@
     <MESSAGE value="Added tokens and permissions tweaks" />
     <MESSAGE value="Added admin panel, imgs to products" />
     <MESSAGE value="Product images tweaks" />
-    <option name="LAST_COMMIT_MESSAGE" value="Product images tweaks" />
+    <MESSAGE value="Product images tweaks again" />
+    <option name="LAST_COMMIT_MESSAGE" value="Product images tweaks again" />
   </component>
 </project>

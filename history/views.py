@@ -24,3 +24,16 @@ class OrderDetail(APIView):
 
         serializer = OrderSerializer(order)
         return Response(serializer.data)
+
+    def patch(self, request, pk):
+        try:
+            order = Order.objects.get(pk=pk)
+        except Order.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if order.status == 'pending':
+            order.status = 'completed'
+            order.save()
+            return Response({'message': 'Order status updated to completed.'}, status=status.HTTP_200_OK)
+
+        return Response({'error': 'Order status is not pending, cannot change to completed.'}, status=status.HTTP_400_BAD_REQUEST)
