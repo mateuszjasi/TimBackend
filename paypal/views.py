@@ -6,7 +6,6 @@ import paypalrestsdk
 from django.conf import settings
 from history.models import Order, OrderItem
 from products.models import Product
-from users.models import CustomUser
 
 paypalrestsdk.configure({
     "mode": settings.PAYPAL_MODE,
@@ -54,11 +53,10 @@ class ExecutePaymentView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        user_pk = request.data.get('user_pk')
         payment_id = request.data.get('payment_id')
         payer_id = request.data.get('payer_id')
         order_items = request.data.get('order_items')
-        user = CustomUser.objects.get(pk=user_pk)
+        user = request.user
 
         try:
             payment = paypalrestsdk.Payment.find(payment_id)
@@ -82,6 +80,8 @@ class ExecutePaymentView(APIView):
                     quantity=item['quantity'],
                     price_at_purchase=product.price
                 )
+                product.stock -= item['quantity']
+                product.save()
 
             return Response({'message': 'Payment executed successfully'}, status=status.HTTP_200_OK)
         else:

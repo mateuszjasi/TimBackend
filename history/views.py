@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from users.permissions import IsStaff
 from .models import Order
 from .serializers import OrderSerializer
 
@@ -14,7 +15,10 @@ class OrderList(APIView):
         return Response(serializer.data)
 
 class OrderDetail(APIView):
-    permission_classes = [IsAuthenticated]
+    def get_permissions(self):
+        if self.request.method == 'PATCH':
+            return [IsStaff()]
+        return [IsAuthenticated]
 
     def get(self, request, pk):
         try:
