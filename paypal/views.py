@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -18,9 +19,37 @@ class CreatePaymentView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        total_value = request.data.get('total_value')
         return_url = request.data.get('return_url')
         cancel_url = request.data.get('cancel_url')
+        order_items = request.data.get('order_items')
+        user = request.user
+
+        order = Order.objects.create(
+            user=user,
+            status='unpaid',
+        )
+
+        total_value = 0
+        for item in order_items:
+            try:
+                product = Product.objects.select_for_update().get(id=item['product_id'])
+            except Product.DoesNotExist:
+                transaction.set_rollback(True)
+                return Response({'error': f"Product with id {item['product_id']} does not exist."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            if product.stock < item['quantity']:
+                transaction.set_rollback(True)
+                return Response({'error': f"Not enough stock for product {product.name}."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            total_value += product.price * item['quantity']
+            OrderItem.objects.create(
+                order=order,
+                product=product,
+                quantity=item['quantity'],
+                price_at_purchase=product.price
+            )
 
         payment = paypalrestsdk.Payment({
             "intent": "sale",
@@ -29,23 +58,26 @@ class CreatePaymentView(APIView):
             },
             "transactions": [{
                 "amount": {
-                    "total": str(total_value),
+                    "total": f"{total_value:.2f}",
                     "currency": "PLN"
                 },
-                "description": "Payment for order"
+                "description": f"Payment for order {order.id}"
             }],
             "redirect_urls": {
-                "return_url": str(return_url),
-                "cancel_url": str(cancel_url)
+                "return_url": return_url,
+                "cancel_url": cancel_url
             }
         })
 
         if payment.create():
+            order.transaction_id = payment.id
+            order.save()
             for link in payment.links:
                 if link.rel == "approval_url":
                     approval_url = link.href
                     return Response({'approval_url': approval_url}, status=status.HTTP_200_OK)
 
+        order.delete()
         return Response({'error': 'Payment creation failed'}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -55,8 +87,6 @@ class ExecutePaymentView(APIView):
     def post(self, request):
         payment_id = request.data.get('payment_id')
         payer_id = request.data.get('payer_id')
-        order_items = request.data.get('order_items')
-        user = request.user
 
         try:
             payment = paypalrestsdk.Payment.find(payment_id)
@@ -64,24 +94,20 @@ class ExecutePaymentView(APIView):
             return Response({'error': 'Payment not found'}, status=status.HTTP_404_NOT_FOUND)
 
         if payment.execute({"payer_id": payer_id}):
-            order = Order.objects.create(
-                user=user,
-                status='pending',
-                transaction_id=payment.id
-            )
+            try:
+                order = Order.objects.get(transaction_id=payment_id)
+            except Order.DoesNotExist:
+                return Response({'error': 'Order associated with this payment not found.'}, status=status.HTTP_404_NOT_FOUND)
+            order.status = 'paid'
+            order.save()
 
+            order_items = OrderItem.objects.select_related('product').filter(order=order)
             for item in order_items:
-                product = Product.objects.get(id=item['product_id'])
-                OrderItem.objects.create(
-                    order=order,
-                    product=product,
-                    quantity=item['quantity'],
-                    price_at_purchase=product.price
-                )
-                product.stock -= item['quantity']
+                product = item.product
+                product.stock -= item.quantity
                 product.save()
 
-            return Response({'message': 'Payment executed successfully'}, status=status.HTTP_200_OK)
+            return Response({'message': 'Payment executed successfully.'}, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Payment execution failed'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -90,4 +116,18 @@ class CancelPaymentView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        return Response({'message': 'Payment cancelled by the user'}, status=status.HTTP_200_OK)
+        payment_id = request.data.get('payment_id')
+
+        try:
+            order = Order.objects.get(transaction_id=payment_id)
+        except Order.DoesNotExist:
+            return Response({'error': 'Order associated with this payment not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if order.status == 'paid':
+            return Response({'message': 'Cannot cancel a paid order.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        order.status = 'cancelled'
+        order.save()
+
+        return Response({'message': 'Payment cancelled and order status updated.'}, status=status.HTTP_200_OK)
+

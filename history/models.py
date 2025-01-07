@@ -5,13 +5,15 @@ from users.models import CustomUser
 
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
+        ('unpaid', 'Unpaid'),
+        ('paid', 'Paid'),
+        ('canceled', 'Canceled'),
         ('completed', 'Completed'),
     ]
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
-    transaction_id = models.CharField(max_length=256, blank=True, null=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='unpaid')
+    transaction_id = models.CharField(max_length=100, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
