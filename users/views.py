@@ -8,7 +8,10 @@ from users.permissions import IsAdmin, IsAdminOrOwner
 User = get_user_model()
 
 class UserList(APIView):
-    permission_classes = [IsAdmin]
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [IsAdmin()]
+        return []
 
     def get(self, request):
         users = User.objects.all()

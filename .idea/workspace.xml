@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5d0fa7a-97c2-4f12-9b46-2195331f0215" name="Changes" comment="Added payment, permissions tweaks">
+    <list default="true" id="c5d0fa7a-97c2-4f12-9b46-2195331f0215" name="Changes" comment="History permissions tweak, stock update after successful purchase">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/history/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/history/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paypal/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/paypal/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +115,9 @@
       <workItem from="1736167709265" duration="158000" />
       <workItem from="1736167879709" duration="393000" />
       <workItem from="1736171844417" duration="8008000" />
-      <workItem from="1736194875390" duration="2809000" />
+      <workItem from="1736194875390" duration="3045000" />
+      <workItem from="1736199001278" duration="156000" />
+      <workItem from="1736249189043" duration="1731000" />
     </task>
     <task id="LOCAL-00001" summary="Fist commit">
       <option name="closed" value="true" />
@@ -165,7 +167,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736177547217</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="History permissions tweak, stock update after successful purchase">
+      <option name="closed" value="true" />
+      <created>1736197920999</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1736197920999</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -178,6 +188,7 @@
     <MESSAGE value="Product images tweaks" />
     <MESSAGE value="Product images tweaks again" />
     <MESSAGE value="Added payment, permissions tweaks" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added payment, permissions tweaks" />
+    <MESSAGE value="History permissions tweak, stock update after successful purchase" />
+    <option name="LAST_COMMIT_MESSAGE" value="History permissions tweak, stock update after successful purchase" />
   </component>
 </project>
