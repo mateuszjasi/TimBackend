@@ -32,8 +32,8 @@ class CreatePaymentView(APIView):
         total_value = 0
         for item in order_items:
             try:
-                quantity = int(item['quantity'])
-                product_id = item['product']['id']
+                quantity = int(item['licznik'])
+                product_id = item['produkt']['id']
                 product = Product.objects.get(id=product_id)
             except Product.DoesNotExist:
                 return Response({'error': f"Product with id {item['product']['id']} does not exist."},
@@ -117,7 +117,7 @@ class ExecutePaymentView(APIView):
 class CancelPaymentView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    def post(self, request):
         order_id = request.query_params.get('order_id')
         user = request.user
 
