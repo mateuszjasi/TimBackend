@@ -48,7 +48,7 @@ class OrderDetail(APIView):
         except Order.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        if order.status == 'pending':
+        if order.status == 'paid':
             order.status = 'completed'
             order.save()
             return Response({'message': 'Order status updated to completed.'}, status=status.HTTP_200_OK)
