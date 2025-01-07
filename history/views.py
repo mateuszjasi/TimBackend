@@ -19,8 +19,8 @@ class UserOrderList(APIView):
         if request.user.pk != pk and not request.user.is_staff:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         try:
-            order = Order.objects.get(user=User.objects.get(pk=pk))
-            serializer = OrderSerializer(order)
+            order = Order.objects.filter(user=User.objects.get(pk=pk))
+            serializer = OrderSerializer(order, many=True)
             return Response(serializer.data)
         except Order.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)

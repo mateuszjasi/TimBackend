@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5d0fa7a-97c2-4f12-9b46-2195331f0215" name="Changes" comment="User POST request permission tweak, serializer now checks permissions when needed">
+    <list default="true" id="c5d0fa7a-97c2-4f12-9b46-2195331f0215" name="Changes" comment="History rework">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/history/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/history/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/history/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/history/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/history/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/history/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paypal/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/paypal/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/permissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/permissions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +119,8 @@
       <workItem from="1736249189043" duration="1835000" />
       <workItem from="1736252817999" duration="202000" />
       <workItem from="1736255436420" duration="38000" />
-      <workItem from="1736256086562" duration="5823000" />
+      <workItem from="1736256086562" duration="7230000" />
+      <workItem from="1736269107119" duration="664000" />
     </task>
     <task id="LOCAL-00001" summary="Fist commit">
       <option name="closed" value="true" />
@@ -189,7 +186,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736250929889</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="History rework">
+      <option name="closed" value="true" />
+      <created>1736263484395</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1736263484395</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -204,6 +209,7 @@
     <MESSAGE value="Added payment, permissions tweaks" />
     <MESSAGE value="History permissions tweak, stock update after successful purchase" />
     <MESSAGE value="User POST request permission tweak, serializer now checks permissions when needed" />
-    <option name="LAST_COMMIT_MESSAGE" value="User POST request permission tweak, serializer now checks permissions when needed" />
+    <MESSAGE value="History rework" />
+    <option name="LAST_COMMIT_MESSAGE" value="History rework" />
   </component>
 </project>
