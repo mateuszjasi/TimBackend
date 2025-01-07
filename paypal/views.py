@@ -64,7 +64,6 @@ class ExecutePaymentView(APIView):
             return Response({'error': 'Payment not found'}, status=status.HTTP_404_NOT_FOUND)
 
         if payment.execute({"payer_id": payer_id}):
-            total_amount = 0
             order = Order.objects.create(
                 user=user,
                 status='pending',
@@ -73,7 +72,6 @@ class ExecutePaymentView(APIView):
 
             for item in order_items:
                 product = Product.objects.get(id=item['product_id'])
-                total_amount += product.price * item['quantity']
                 OrderItem.objects.create(
                     order=order,
                     product=product,
