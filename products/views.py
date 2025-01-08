@@ -13,7 +13,7 @@ class ProductList(APIView):
         return []
 
     def get(self, request):
-        products = Product.objects.all()
+        products = Product.objects.filter(is_active=True)
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
@@ -34,16 +34,21 @@ class ProductDetail(APIView):
     def get(self, request, pk):
         try:
             product = Product.objects.get(pk=pk)
+            if product.is_active:
+                serializer = ProductSerializer(product)
+                return Response(serializer.data)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
         except Product.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
-        serializer = ProductSerializer(product)
-        return Response(serializer.data)
 
     def put(self, request, pk):
         try:
             product = Product.objects.get(pk=pk)
         except Product.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if not product.is_active:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         serializer = ProductSerializer(product, data=request.data)
@@ -58,6 +63,9 @@ class ProductDetail(APIView):
         except Product.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+        if not product.is_active:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
         serializer = ProductSerializer(product, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -67,7 +75,8 @@ class ProductDetail(APIView):
     def delete(self, request, pk):
         try:
             product = Product.objects.get(pk=pk)
-            product.delete()
+            product.is_active = False
+            product.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Product.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)

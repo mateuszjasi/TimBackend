@@ -26,6 +26,7 @@ class Product(models.Model):
         null=True,
         validators=[validate_image]
     )
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

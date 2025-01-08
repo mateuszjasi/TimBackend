@@ -14,7 +14,7 @@ class UserList(APIView):
         return []
 
     def get(self, request):
-        users = User.objects.all()
+        users = User.objects.filter(is_active=True)
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
 
@@ -38,6 +38,8 @@ class UserDetail(APIView):
             user = User.objects.get(pk=pk)
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+        if not user.is_active:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         self.check_object_permissions(request, user)
         serializer = UserSerializer(user)
         return Response(serializer.data)
@@ -46,6 +48,8 @@ class UserDetail(APIView):
         try:
             user = User.objects.get(pk=pk)
         except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        if not user.is_active:
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = UserSerializer(user, data=request.data)
         if serializer.is_valid():
@@ -58,6 +62,8 @@ class UserDetail(APIView):
             user = User.objects.get(pk=pk)
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+        if not user.is_active:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -67,7 +73,8 @@ class UserDetail(APIView):
     def delete(self, request, pk):
         try:
             user = User.objects.get(pk=pk)
-            user.delete()
+            user.is_active = False
+            user.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
