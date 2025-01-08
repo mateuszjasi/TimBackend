@@ -8,6 +8,7 @@ class Order(models.Model):
         ('unpaid', 'Unpaid'),
         ('paid', 'Paid'),
         ('canceled', 'Canceled'),
+        ('ready', 'Ready'),
         ('completed', 'Completed'),
     ]
 

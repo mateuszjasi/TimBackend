@@ -10,7 +10,7 @@ class OrderList(APIView):
     permission_classes = [IsStaff]
 
     def get(self, request):
-        orders = Order.objects.all()
+        orders = Order.objects.all().order_by('-pk')
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
 
@@ -19,46 +19,56 @@ class UserOrderList(APIView):
         if request.user.pk != pk and not request.user.is_staff:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         try:
-            order = Order.objects.filter(user=User.objects.get(pk=pk))
+            order = Order.objects.filter(user=User.objects.get(pk=pk)).order_by('-pk')
             serializer = OrderSerializer(order, many=True)
             return Response(serializer.data)
         except Order.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-class OrderDetail(APIView):
-    def get_permissions(self):
-        if self.request.method in ['PATCH', 'DELETE']:
-            return [IsStaff()]
-        return []
+class OrderReadyList(APIView):
+    permission_classes = [IsStaff]
 
-    def get(self, request, pk, pk2):
-        if request.user.pk != pk and not request.user.is_staff:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        try:
-            order = Order.objects.get(pk=pk2)
-        except Order.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        serializer = OrderSerializer(order)
+    def get(self, request):
+        orders = Order.objects.filter(status='paid').order_by('-pk')
+        serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
 
-    def patch(self, request, pk, pk2):
+class OrderReady(APIView):
+    permission_classes = [IsStaff]
+
+    def patch(self, request, pk):
         try:
-            order = Order.objects.get(pk=pk2)
+            order = Order.objects.get(pk=pk)
         except Order.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         if order.status == 'paid':
+            order.status = 'ready'
+            order.save()
+            return Response({'message': 'Order status updated to ready.'}, status=status.HTTP_200_OK)
+
+        return Response({'error': 'Order status is not paid, cannot change to ready.'}, status=status.HTTP_400_BAD_REQUEST)
+
+class OrderPickupList(APIView):
+    permission_classes = [IsStaff]
+
+    def get(self, request):
+        orders = Order.objects.filter(status='ready').order_by('-pk')
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
+
+class OrderPickup(APIView):
+    permission_classes = [IsStaff]
+
+    def patch(self, request, pk):
+        try:
+            order = Order.objects.get(pk=pk)
+        except Order.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if order.status == 'ready':
             order.status = 'completed'
             order.save()
             return Response({'message': 'Order status updated to completed.'}, status=status.HTTP_200_OK)
 
-        return Response({'error': 'Order status is not pending, cannot change to completed.'}, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, pk2):
-        try:
-            order = Order.objects.get(pk=pk)
-            order.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except Order.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Order status is not ready, cannot change to completed.'}, status=status.HTTP_400_BAD_REQUEST)
