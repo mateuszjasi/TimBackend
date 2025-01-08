@@ -118,7 +118,7 @@ class CancelPaymentView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        order_id = request.query_params.get('order_id')
+        order_id = request.data.get('order_id')
         user = request.user
 
         try:
@@ -129,8 +129,9 @@ class CancelPaymentView(APIView):
         if order.status == 'paid':
             return Response({'message': 'Cannot cancel a paid order.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        order.status = 'cancelled'
-        order.save()
-
-        return Response({'message': 'Payment cancelled and order status updated.'}, status=status.HTTP_200_OK)
-
+        if order.status == 'unpaid':
+            order.status = 'cancelled'
+            order.save()
+            return Response({'message': 'Payment cancelled and order status updated.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Order already cancelled.'}, status=status.HTTP_400_BAD_REQUEST)
