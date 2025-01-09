@@ -3,6 +3,7 @@ from .models import Product
 
 class ProductSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
+    is_active = serializers.BooleanField(default=True)
 
     class Meta:
         model = Product
