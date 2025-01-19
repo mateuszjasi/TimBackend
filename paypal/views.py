@@ -21,7 +21,7 @@ class CreatePaymentView(APIView):
     def post(self, request):
         return_url = request.data.get('return_url')
         cancel_url = request.data.get('cancel_url')
-        order_items = request.data.get('order_items')
+        order_items = request.data.get('order_items', [])
         user = request.user
 
         order = Order.objects.create(
@@ -32,14 +32,16 @@ class CreatePaymentView(APIView):
         total_value = 0
         for item in order_items:
             try:
-                quantity = int(item['licznik'])
-                product_id = item['produkt']['id']
+                quantity = item['quantity']
+                product_id = item['id']
                 product = Product.objects.get(id=product_id)
             except Product.DoesNotExist:
-                return Response({'error': f"Product with id {item['product']['id']} does not exist."},
+                order.delete()
+                return Response({'error': f"Product with id {item['id']} does not exist."},
                                 status=status.HTTP_400_BAD_REQUEST)
 
             if product.stock < quantity:
+                order.delete()
                 return Response({'error': f"Not enough stock for product {product.name}."},
                                 status=status.HTTP_400_BAD_REQUEST)
 
