@@ -16,14 +16,17 @@ class OrderList(APIView):
 
 class UserOrderList(APIView):
     def get(self, request, pk):
-        if request.user.pk != pk and not request.user.is_staff:
+        if pk == 0 or request.user.pk == pk or request.user.is_staff:
+            try:
+                if pk == 0:
+                    pk = request.user.id
+                order = Order.objects.filter(user=User.objects.get(pk=pk)).order_by('-pk')
+                serializer = OrderSerializer(order, many=True)
+                return Response(serializer.data)
+            except Order.DoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        try:
-            order = Order.objects.filter(user=User.objects.get(pk=pk)).order_by('-pk')
-            serializer = OrderSerializer(order, many=True)
-            return Response(serializer.data)
-        except Order.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
 class OrderReadyList(APIView):
     permission_classes = [IsStaff]
