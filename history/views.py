@@ -75,3 +75,27 @@ class OrderPickup(APIView):
             return Response({'message': 'Order status updated to completed.'}, status=status.HTTP_200_OK)
 
         return Response({'error': 'Order status is not ready, cannot change to completed.'}, status=status.HTTP_400_BAD_REQUEST)
+
+class OrderDeliveryList(APIView):
+    permission_classes = [IsStaff]
+
+    def get(self, request):
+        orders = Order.objects.filter(status='shipping').order_by('-pk')
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
+
+class OrderDelivery(APIView):
+    permission_classes = [IsStaff]
+
+    def patch(self, request, pk):
+        try:
+            order = Order.objects.get(pk=pk)
+        except Order.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        if order.status == 'shipping':
+            order.status = 'completed'
+            order.save()
+            return Response({'message': 'Order status updated to completed.'}, status=status.HTTP_200_OK)
+
+        return Response({'error': 'Order status is not shipping, cannot change to completed.'},
+                        status=status.HTTP_400_BAD_REQUEST)
