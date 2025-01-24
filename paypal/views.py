@@ -116,7 +116,7 @@ class ExecutePaymentView(APIView):
             except Order.DoesNotExist:
                 return Response({'error': 'Order associated with this payment not found.'}, status=status.HTTP_404_NOT_FOUND)
             if DeliveryDetails.objects.filter(order=order).exists():
-                order.status = 'shipped'
+                order.status = 'shipping'
             else:
                 order.status = 'paid'
             order.save()
