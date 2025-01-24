@@ -9,6 +9,7 @@ class Order(models.Model):
         ('paid', 'Paid'),
         ('canceled', 'Canceled'),
         ('ready', 'Ready'),
+        ('shipping', 'Shipping'),
         ('completed', 'Completed'),
     ]
 

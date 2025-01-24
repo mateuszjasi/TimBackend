@@ -5,6 +5,7 @@ from rest_framework import status
 import paypalrestsdk
 from django.conf import settings
 from history.models import Order, OrderItem
+from paypal.models import DeliveryDetails
 from products.models import Product
 from urllib.parse import urlencode
 
@@ -14,7 +15,6 @@ paypalrestsdk.configure({
     "client_secret": settings.PAYPAL_CLIENT_SECRET,
 })
 
-
 class CreatePaymentView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -22,12 +22,24 @@ class CreatePaymentView(APIView):
         return_url = request.data.get('return_url')
         cancel_url = request.data.get('cancel_url')
         order_items = request.data.get('order_items', [])
+        delivery_details_data = request.data.get('deliveryDetails', None)
         user = request.user
 
         order = Order.objects.create(
             user=user,
             status='unpaid',
         )
+
+        if delivery_details_data:
+            DeliveryDetails.objects.create(
+                order=order,
+                name=delivery_details_data.get('name', ''),
+                street=delivery_details_data.get('street', ''),
+                house_number=delivery_details_data.get('houseNumber', ''),
+                city=delivery_details_data.get('city', ''),
+                postal_code=delivery_details_data.get('postalCode', ''),
+                phone_number=delivery_details_data.get('phoneNumber', ''),
+            )
 
         total_value = 0
         for item in order_items:
@@ -103,7 +115,10 @@ class ExecutePaymentView(APIView):
                 order = Order.objects.get(transaction_id=payment_id)
             except Order.DoesNotExist:
                 return Response({'error': 'Order associated with this payment not found.'}, status=status.HTTP_404_NOT_FOUND)
-            order.status = 'paid'
+            if DeliveryDetails.objects.filter(order=order).exists():
+                order.status = 'shipped'
+            else:
+                order.status = 'paid'
             order.save()
 
             order_items = OrderItem.objects.select_related('product').filter(order=order)
