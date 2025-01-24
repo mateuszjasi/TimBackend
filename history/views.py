@@ -77,7 +77,6 @@ class OrderPickup(APIView):
         return Response({'error': 'Order status is not ready, cannot change to completed.'}, status=status.HTTP_400_BAD_REQUEST)
 
 class OrderDeliveryList(APIView):
-    permission_classes = [IsStaff]
 
     def get(self, request):
         orders = Order.objects.filter(status='shipping').order_by('-pk')
@@ -85,7 +84,6 @@ class OrderDeliveryList(APIView):
         return Response(serializer.data)
 
 class OrderDelivery(APIView):
-    permission_classes = [IsStaff]
 
     def patch(self, request, pk):
         try:

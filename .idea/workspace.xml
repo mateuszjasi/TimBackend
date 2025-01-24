@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5d0fa7a-97c2-4f12-9b46-2195331f0215" name="Changes" comment="Delivery added">
+    <list default="true" id="c5d0fa7a-97c2-4f12-9b46-2195331f0215" name="Changes" comment="Delivery status change">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/history/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/history/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/history/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/history/views.py" afterDir="false" />
@@ -149,7 +149,9 @@
       <workItem from="1737481397289" duration="1919000" />
       <workItem from="1737539280042" duration="187000" />
       <workItem from="1737567744946" duration="983000" />
-      <workItem from="1737722340498" duration="8174000" />
+      <workItem from="1737722340498" duration="8193000" />
+      <workItem from="1737739012080" duration="17000" />
+      <workItem from="1737739651257" duration="46000" />
     </task>
     <task id="LOCAL-00001" summary="Fist commit">
       <option name="closed" value="true" />
@@ -327,7 +329,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737738336996</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Delivery status change">
+      <option name="closed" value="true" />
+      <created>1737738998182</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1737738998182</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -355,6 +365,7 @@
     <MESSAGE value="Changes for mobile app" />
     <MESSAGE value="OrderList hotfix" />
     <MESSAGE value="Delivery added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Delivery added" />
+    <MESSAGE value="Delivery status change" />
+    <option name="LAST_COMMIT_MESSAGE" value="Delivery status change" />
   </component>
 </project>
